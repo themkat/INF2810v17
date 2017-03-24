@@ -1,5 +1,5 @@
 # Time 9 - 23.03.17
-Denne timen ser vi endel på omgivelsesdiagram (pga at dette er superrelevant for oblig 2b!). Vegard (gruppelærer for gruppe 3) har allerede laget en utfyllende guide for omgivelsesdiagram, som dere kan finne på [https://github.com/vegarsti/INF2810V17/tree/master/08](hans github repo for kurset). Under vil jeg ta et eksempel på hvordan vi tegner anonyme prosedyrer. 
+Denne timen ser vi endel på omgivelsesdiagram (pga at dette er superrelevant for oblig 2b!). Vegard (gruppelærer for gruppe 3) har allerede laget en utfyllende guide for omgivelsesdiagram, som dere kan finne på [hans github repo for kurset](https://github.com/vegarsti/INF2810V17/tree/master/08). Under vil jeg ta et eksempel på hvordan vi tegner anonyme prosedyrer. 
 
 
 ## Omgivelsesdiagram for anonyme prosedyrer
