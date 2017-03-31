@@ -179,4 +179,5 @@ I hvert steg går vi nå gjennom hele listen, og sjekker om lengden er null. Det
 
 
 
-** Håper dere ble med på kahooten! Skal prøve å få lagt ut en link
+** Håper dere ble med på kahooten!
+[[https://play.kahoot.it/#/k/aefe6351-79a4-4aef-bca8-524a71e4679a][Kanksje dere vil se på den igjen?]]
