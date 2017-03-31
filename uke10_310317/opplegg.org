@@ -106,10 +106,31 @@ Skal prøve å ta noen boks og peker diagrammer i gruppetimen for å vise denne 
 
 
 *** Lite hint til memoiseringsoppgaven
-Et lite hint til memoiseringsoppgaven finnes i [[https://github.com/vegarsti/INF2810V17/tree/master/10][Vegard sitt github repo]] (vi gjennomgår også dette i timen).
+Et lite hint til memoiseringsoppgaven finnes i [[https://github.com/vegarsti/INF2810V17/tree/master/10][Vegard sitt github repo]] (vi gjennomgår også dette i timen). Vi titter også raskt på ~apply~-eksemplene i timen.
 
 
 ** Repitisjon (og litt "after-oblig" for oblig 2a) 
+*** set-car! og set-cdr!
+Vi har allerede blitt introdusert til ~set!~ for å endre bindinger, som er en special form. Vi har også liste-varianter av dette for å destruktivt endre elementer i an parstruktur. 
+
+#+BEGIN_SRC scheme 
+  (define test (list 1 2 3 4))
+
+  (set-car! test 3)
+  test
+  ;; => (3 2 3 4)
+
+  (set-cdr! (cdr test) 5)
+  test
+  ;; => (3 2 . 5)
+
+  (set-cdr! (cdr test) test)
+  test
+  ;; => #0=(3 2 . #0#)
+  ;; betyr at listen består av 3 og 2, og peker tilbake på seg selv
+  ;; altså en sirkulær liste
+#+END_SRC
+
 *** append
 ~append~ er en utrolig viktig prosedyre på mange måter, men med mye misbrukspotensial. With great power comes great responsibility! Som flere andre prosedyrer som er nevnt, er denne innebygget i R5RS. En mulig implementasjon kan ser slik ut (fra ukeoppgaver):
 
@@ -123,17 +144,15 @@ Et lite hint til memoiseringsoppgaven finnes i [[https://github.com/vegarsti/INF
 Det denne gjør er rett og slett å ta imot to parametere (lister), kopierer hele første-listen og setter siste-pekeren i denne til å være liste nummer 2. Hvor er misbrukspotensialet hen? Jo, mange velger å bruke denne for å ikke bygge opp lister i feil rekkefølge ved halerekursjon (tar selvkritikk for at jeg ikke har vært veldig tydelig på dette før). Ikke føl deg truffet om du har gjort dette, ALLE gjør denne feilen i starten. Når jeg hadde kurset gjorde jeg også den helt til jeg så et eksempel som dette som forklarte det. ~append~ er så enkelt i forhold til å bygge opp selv. Fra [[http://folk.uio.no/haakomol/inf2810/ressurser/listerekursjon.html][liste-rekursjons-guiden]] har vi følgende prosedyre:
 
 #+BEGIN_SRC scheme  
-(define (add-n-iter items n)
-    (define (iter in out)
-      (if (null? in)
-          (reverse out)
-          (iter (cdr in) (cons (+ (car in) n) out))))
-    (iter items '()))
+  (define (add-n-iter items n)
+      (define (iter in out)
+	(if (null? in)
+            (reverse out)
+            (iter (cdr in) (cons (+ (car in) n) out))))
+      (iter items '()))
 #+END_SRC
 
 Det denne gjør er rett og slett å å legge til et tall ~n~ på hvert element i en liste. Vi ser her at vi bygger opp listen med ~cons~ i reversert rekkefølge, og bruker ~reverse~ for å reversere den til slutt (Oppgave: Prøv å fjern ~reverse~-kallet og prøv å endre rekkefølgen i ~cons~, hva skjer?). Dette er den mest effektive måten å bygge listen på i en hale-rekursiv prosedyre. Vi bygger opp listen med konstant tid i hvert steg (noe som gir oss lineær tid), og reverserer til slutt på lineær tid (lineær tid totalt => O(2n) = O(n)). Med ~append~ vil vi få kvadratisk tid siden vi i hvert steg vil gå gjennom hva vi har samlet opp hittil en gang.
-TODO: mer konkret og mer konkret eksempel
-
 
 *** length
 Vi gjorde dette forrige time, men kan fortsatt være greit å se litt på. Det ~length~ gjør er rett og slett å gå gjennom hele lista den tar imot, og øke en teller med en for hvert element. Prosedyren er innebygget i R5RS, og en rekursiv prosedyre (opphav til rekursiv prosess) ser slik ut (fra forelesning):
@@ -145,10 +164,19 @@ Vi gjorde dette forrige time, men kan fortsatt være greit å se litt på. Det ~
 	(+ 1 (length (cdr items)))))
 #+END_SRC 
 
-Hvorfor tar jeg opp denne? Den er selvfølgelig nyttig å vite om, men det er en annen grunn til at jeg tar opp dette. Mange studenter velger å bruke denne i basistilfellet når vi rekurserer lister, f.eks ~(zero? (length lst))~, ~(= (length lst) 1)~ osv. (hvor ~lst~ er liste-variablen vår). Dette gir uønsket kompleksitet, da vi i hvert steg må gå gjennom en liste en hel gang (med ett og ett element mindre hver gang. 
-TODO: legg inn eksempel og mer info
+Hvorfor tar jeg opp denne? Den er selvfølgelig nyttig å vite om, men det er en annen grunn til at jeg tar opp dette. Mange studenter velger å bruke denne i basistilfellet når vi rekurserer lister, f.eks ~(zero? (length lst))~, ~(= (length lst) 1)~ osv. (hvor ~lst~ er liste-variablen vår). Dette gir uønsket kompleksitet, da vi i hvert steg må gå gjennom en liste en hel gang (med ett og ett element mindre hver gang. F.eks en add-n-iter med dette som basistilfelle:
+
+#+BEGIN_SRC scheme 
+  (define (add-n-iter items n)
+      (define (iter in out)
+	(if (zero (length in))
+            (reverse out)
+            (iter (cdr in) (cons (+ (car in) n) out))))
+      (iter items '()))
+#+END_SRC
+
+I hvert steg går vi nå gjennom hele listen, og sjekker om lengden er null. Dette blir som sagt utrolig ueffektivt.
 
 
 
-
-** TODO legg inn mer her
+** Håper dere ble med på kahooten! Skal prøve å få lagt ut en link
