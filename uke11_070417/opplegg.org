@@ -1,0 +1,95 @@
+* Opplegg for gruppetimen 07.04.17
+
+** Omgivelsesdiagram
+Husk at hvert prosedyrekall oppretter en ny ramme (noe som også vil si at ~let~-uttrykk lager en ramme). Se f.eks på hvor mange nye rammer som lages hver gang vi lager en ny counter! Jeg har desverre vært lite tydelig på de jeg har hjulpet om løsningene deres har vært riktige eller ikke, med tanke på antall rammer. Håper allikevel dere har lest reglene jeg har nevnt om når vi får nye rammer. La oss ta et eksempel 
+
+#+BEGIN_SRC scheme
+  (define (proc)
+    (let ((a 10))
+      a))
+
+  (proc)
+#+END_SRC
+
+Idet ~proc~ kalles (siste linje), så vil vi få en ramme pga selve kallet og en for ~let~-uttrykket. Altså:
+
+[[./omgiv.jpg]]
+
+Dette virker kanskje som et litt teit eksempel, men det illustrerer hvordan reglene for omgivelsesdiagram fungerer. 
+
+
+
+** Noen siste små-hint til memoisering 
+Merk at det kan hende du løser oppgaven uten noen å tenke over noen av disse.
+
+*** De to syntaksformene for å definere prosedyrer
+-- For å illustrere at (define tmp <noe>) kan fungere, så bruk f.eks . Ikke avslør svaret, men vis tydelig at vi evaluerer dette og dermed kan ha innkapsling der.
+
+Som vi husker tidligere har vi to former for å definere prosedyrer.
+#+BEGIN_SRC scheme
+  (define proc (lambda <args> <body>))
+  ;; er ekvivalent med
+  (define (proc <args>)
+    <body>)
+#+END_SRC
+
+Hva skjer i den første måten? Vi evaluerer rett og slett uttrykket ~exp~ (som er ~lambda~-uttrykket) i ~(define <name> <exp>)~ først, og binder dette til det oppgitte navnet (~proc~ i eksempelet). Da kunne vi f.eks definert en prosedyre på en slik absurd måte: 
+
+#+BEGIN_SRC scheme
+  (define proc (cdr (cons 1 (lambda (x) (* x x)))))
+#+END_SRC
+
+Denne måten er ikke en god måte å definere en prosedyre, men den viser oss tydelig hvordan dette fungerer. Hvordan spiller dette inn i 2b? Vil ikke avsløre for mye her, men tenk på innkapsling ;)
+
+
+*** Prosedyrer er førsteklasses objekter!
+Vi har ofte i dette emnet hørt at prosedyrer er førsteklasses objekter. Dette vil si at de kan brukes akkurat som alle andre primitiver i språket (tall, strenger osv.), f.eks som verdier i lister, nøkler i tabellstrukturen dere arbeider med i 2b osv. 
+
+
+
+** Nyttig prosedyre
+*** ~for-each~
+Denne prosedyren burde jeg ha gjennomgått tidligere. Grunnen til at den glemmes bort er rett og slett at den nevnes veldig lite i foiler, og kun noe på siden for ukeoppgavene. ~for-each~ er en prosedyre som går gjennom en liste element for element. Dette høres kanskje kjent ut fra ~map~, men ~for-each~ skiller seg fra ~map~ ved at den ikke har noen returverdi. Dette gjør den veldig fin til destruktive operasjoner. Siden denne kan nyttes til å forenkle prosedyrer i stack i oblig 2b, så blir eksemplene under veldig begrensede.
+
+#+BEGIN_SRC scheme
+  ;; Enkelt eksempel med verditilordning
+  (let ((some-value 1))
+    (for-each (lambda (x) (set! some-value x))
+	      '(1 2 3 4 5))
+    some-value)
+  ;; => 5
+
+
+  ;; Eksempel med lister
+  (let ((some-list '(1 2 3 4 5 6)))
+    (for-each (lambda (x) (set-cdr! some-list x))
+	      '(a b c d e))
+    some-list)
+  ;; => (1 . e)
+#+END_SRC
+
+Dette virker veldig banalt, og litt meningsløst. Det viktige her er å legge merke til hva den gjør. Akkurat som ~map~ går den gjennom element for element og utfører prosedyren vi har oppgitt på hvert element. Som nevnt lagrer ikke ~for-each~ svaret underveis. En mulig implementasjon av ~for-each~ vil da se slik ut:
+
+#+BEGIN_SRC scheme
+  (define (for-each proc lst)
+    (if (not (null? lst))
+	(begin (proc (car lst))
+	       (for-each proc (cdr lst)))))
+#+END_SRC
+
+
+
+
+** Ekstraoppgaver
+*** Utvidelse av Church Numerals med en multiply operasjon
+Merk at dette kanskje ikke er 100 % riktig med hvordan Church Numerals fungerer, men vil gi omtrent samme resultat. Denne oppgaven ble laget litt for moro skyld, og kan f.eks brukes repetisjon og trening med anonyme prosedyrer. Merk at denne oppgaven er laget av meg, så tar gjerne imot tilbakemeldinger til hvordan forbedre oppgaveteksten. 
+
+**** Oppgave 1
+Gjør [[https://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html#%_sec_1.3.4][oppgave 1.42 og 1.43 i SICP]]. Disse går ut på å implementere prosedyrene ~compose~ og ~repeated~ som du kommer til å få veldig bruk for i neste oppgave hvor du skal implementere en multiplikasjonsprosedyre for Church Numerals.
+
+**** Oppgave 2
+Implementer en prosedyre ~mult~ som tar imot to Church nummere (f.eks ~one~ og ~two~ som dere implementerte i oppgave 2.6). 
+
+
+**** Løsningsforslag
+[[https://github.com/markydawn/INF2810v17/blob/master/extra/ChurchNumerals2.scm][Løsningsforslag]]
