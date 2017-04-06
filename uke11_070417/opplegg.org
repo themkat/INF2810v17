@@ -1,7 +1,7 @@
 * Opplegg for gruppetimen 07.04.17
 
 ** Omgivelsesdiagram
-Husk at hvert prosedyrekall oppretter en ny ramme (noe som også vil si at ~let~-uttrykk lager en ramme). Se f.eks på hvor mange nye rammer som lages hver gang vi lager en ny counter! Jeg har desverre vært lite tydelig på de jeg har hjulpet om løsningene deres har vært riktige eller ikke, med tanke på antall rammer. Håper allikevel dere har lest reglene jeg har nevnt om når vi får nye rammer. La oss ta et eksempel 
+Husk at hvert prosedyrekall oppretter en ny ramme (noe som også vil si at ~let~-uttrykk lager en ramme). Se f.eks på hvor mange nye rammer som lages hver gang vi lager en ny counter! Føler i ettertid jeg har vært litt for utydelig på dette når jeg har hjulpet enkelte. Håper allikevel dere har lest reglene jeg har nevnt om når vi får nye rammer. La oss ta et eksempel 
 
 #+BEGIN_SRC scheme
   (define (proc)
