@@ -1,0 +1,140 @@
+* Opplegg 21.04.17
+Merk at dette 
+
+
+** Repetisjon om omgivelsesdiagram
+*** Et lite message passing eksempel
+La oss tenke oss en veldig enkel struktur for å bevare en verdi. Denne strukturen skal kunne returnere verden vi har bevart, og endre den. En mulig implementasjon vil se slik ut:
+
+#+BEGIN_SRC scheme
+  (define (keep-val x)
+    (lambda (msg . args)
+      (cond ((eq? msg 'set)
+	     (set! x (car args)))
+	    ((eq? msg 'get)
+	     x)
+	    (else
+	     (display "Give me 'set or 'get pls!")
+	     (newline)))))
+#+END_SRC
+
+La oss tenke oss noen eksempelkall:
+
+#+BEGIN_SRC scheme
+  (define val1 (keep-val "I am a string"))
+  (define val2 (keep-val 'I-AM-A-SYMBOL))
+
+  (val1 'set 2)
+  (val2 'set "I AM A STRING")
+
+  (val2 'get)
+#+END_SRC
+
+Vi skal ta for oss hvordan omgivelsen ser ut under kallet på ~(val2 'get)~ og etter kallet er utført. La oss først se på hva som skjer idet kallet utføres:
+
+[[./omgivelses_keepval.jpg]]
+
+Etter at kallet er utført vil omgivelsen E3 forsvinne. Før uttrykket utføres vil det være akkurat som etter.
+
+
+
+*** Gjennomgang av løsningsforslaget for 2b
+Ikke lagt ut her. Se løsningsforslaget på [[http://www.uio.no/studier/emner/matnat/ifi/INF2810/v17/innleveringer.html][kurssidene]] når det kommer ut. 
+
+
+** Evalueringsstrategier og strømmer
+[[https://github.com/vegarsti/INF2810V17/tree/master/11][Vegards opplegg om evalueringsstrategier]]. I timen min blir delene om ~delay~ og ~force~ gjennomgått, samt noe veldig raskt om evalueringsstrategier. Relevant til eksamen er blant annet forskjellen på Applicative Order/Eager evaluation og Normal Order/Lazy evalution. Ikke undervurder strømmer, det er utrolig relevant til eksamen! Strømmer er innebygget i andre språk som f.eks Haskell. 
+
+
+** Tips til 3a oppgave 2 (Språkmodeller)
+*** Enkel løsning (uten binærtrær siste oppgave spør etter)
+Prøv deg litt fram med assosiasjonslister. For noen uker siden gjennomgikk vi hvordan disse fungerer og hvordan prekoden til oblig 2b implementeres, [[https://github.com/markydawn/INF2810v17/blob/master/uke10_310317/opplegg.org#repitisjon-fra-forelesning-assosiasjons-tabeller-prekode-oblig-2b-og-innebyggede-r5rs-prosedyrer][ta gjerne en titt på det]] om du er veldig usikker på binære trær og vil få til noe just in case først.
+
+*** Binærtrær?!?! Nå blir jeg nervøs!
+Binærtrær har vi (på en måte) vært borti før, da Huffman-trær er binære trær (trær med to grener). Du kan (antageligvis) gjenbruke endel av [[http://www.uio.no/studier/emner/matnat/ifi/INF2810/v17/oppgaver/huffman.scm][prekoden fra oblig 2a]], blant annet ~adjoin-set~ (du har frekvenser eller sannsynligheter du kan sortere etter) og opprettelsen av trærne. Du kan sannsynligvis bruke noe av samme strukturen, og hvis ikke hvertfall ta mye inspirasjon herfra.
+
+
+
+** Tilleggsstoff om makroer (IKKE PENSUM!)
+Vi har allerede sett et eksempel på definering av makroer i prekoden til 3a og i forelesningene. ~cons-stream~ er eksempel på en makro, og er definert slik:
+
+#+BEGIN_SRC scheme
+  (define-syntax cons-stream
+    (syntax-rules ()
+      ((cons-stream head tail) (cons head (delay tail)))))
+#+END_SRC
+
+Hva betyr de ulike delene av ~syntax-rules~? Det første (som stort sett er tom) er kodeord som ikke er evaluerbar kode, men som vi bruker i syntaksen vår (f.eks ~else~ om vi definerer ~cond~). Det andre er en liste bestående av en liste over hvordan syntaksen vår skal se ut, og selve koden som skal genereres. For hva gjør egentlig makroer? De generer kode. Kort sagt generer de kode så vi kan uttrykke nye mekanismer i språket vårt. Dette har stort potensiale i f.eks domenespesifikke språk (DSL) (språk designet for å løse spesifikke oppgaver). Eksempel på DSL er HTML for å lage websider (som desverre ikke er laget i Lisp). 
+
+
+*** Infix eval med makroer
+I oblig 2a lagde dere en prosedyre ~infix-eval~ som tok imot en liste hvor prosedyren var i midten av listen. La oss nå lage et eksempel med makroer (som ikke tar imot en liste) som evalueres med følgende syntax ~(eval-infix (1 + 1))~. Det denne makroen trenger å gjøre er rett og slett basert på det over å generere ny kode som utfører ~(+ 1 1)~. Dette kan vi enkelt gjøre ved å definere en makro.
+
+#+BEGIN_SRC scheme
+  (define-syntax eval-infix
+    (syntax-rules ()
+      ((eval-infix (v1 proc v2))
+       (proc v1 v2))))
+#+END_SRC
+
+Legg merke til at denne bare returnerer kode som flytter på listen vi tar imot. Legg også merke til at syntaksen kan defineres som nesten hva vi vil. Dette bringer oss til et litt annet eksempel hvor vi har en mer bisarr syntaks inspirert av språk dere kjenner fra før som Java, C/C++ osv.
+
+
+*** ~for~ loop
+Mange (spesielt tidlig i kurset) har savnet en enkel mekanisme for looping (f.eks for-loops og while-loops i andre språk). I Common Lisp har man blant annet ~loop~ og ~dolist~, men i R5RS Scheme skrives alt selv. La oss nå lage vår egen lille syntaks for en ~for~-loop vha å definere en makro. Vi kan tenke oss en fiktig syntax for en ~for~-loop ~(for (value-assignment condition next) body)~. Vi kan f.eks gjøre ~value-assignment~ slik ~(variable init-value)~. 
+
+#+BEGIN_SRC scheme
+  ;; Snasen kortform for å definere "anonyme hjelpeprosedyrer"
+  ;; selve navnet <name> kan nå kalles som en vanlig prosedyre i kroppen til let-uttrykket.
+  ;; (helst ikke bruk denne i koden deres i dette kurset, denne er bare brukt for å gjøre koden nederst så liten og lesbar som mulig)
+  (let <name> (<values>)
+       <body>)
+
+
+  ;; for loop makro
+  (define-syntax for
+    (syntax-rules ()
+      ((for ((var init) condition next) body ...)
+       (let loop ((var init))
+	 (if condition
+	     (begin body ...
+		    (loop next)))))))
+#+END_SRC
+
+Punktummene etter ~body~ betyr at etter ~body~  kan det være 0 eller flere uttrykk. Det samme i ~begin~ sier rett og slett at disse skal utføres her. Et enkelt testkall som skriver ut tallene fra 0 opp til 10 (ikke til og med):
+
+#+BEGIN_SRC scheme
+  (for ((i 0) (< i 10) (+ i 1))
+    (display i)
+    (newline))
+#+END_SRC
+
+
+La oss nå lage en enkel for-loop for kaller ~for-list~ som bruker et kodeord som ikke brukes i syntaksen. Vi kan tenke oss at vi ønsker å iterere en liste med følgende syntaks ~(for-list (<l> in <list>) <body>)~ hvor ~<l>~ er et variabelnavn vi oppgir, ~<list>~ er listen vi ønsker å iterere, og ~<body>~ er uttrykkene vi ønsker å utføre med denne lista. Vi bruker samme `let`-looping syntaks som jeg viste over (kun her for å gjøre koden minst mulig), og får koden
+
+#+BEGIN_SRC scheme
+  (define-syntax for-list
+    (syntax-rules ()
+      ((for-list (var in lst) body ...)
+       (let loop ((curr lst))
+	 (if (not (null? curr))
+	     (let ((var (car curr)))
+	       body ...
+	       (loop (cdr curr))))))))
+#+END_SRC
+
+Vi kan gjøre prøve et testkall for å se at det virker:
+
+#+BEGIN_SRC scheme
+  (for-list (i in '("Long" "live" "Stallman," "the" "creator" "of" "Emacs"))
+	    (display i)
+	    (newline))
+#+END_SRC
+
+Tester du koden vil du se at vi får printet hver av strengene i listen på hver sin linje. 
+
+
+Prøv deg gjerne fram og lag noen makroer! Send meg dem på mail eller vis meg i timene mine om du kommer opp med noe kult :) 
+
+
+Om du synes noe av makro-stoffet er vanskelig, så ikke bekymre deg. Dette er ikke pensum til eksamen :)
