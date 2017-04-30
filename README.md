@@ -1,5 +1,5 @@
 # INF2810v17
-Materiale fra INF2810 undervisningen i Gruppe 5. Dette materiale kommer til å være ekstra-materiale og små løsningsforslag fra oppgaver anbefalt i timene.
+Materiale fra INF2810 undervisningen i Gruppe 5. Dette kommer til å være alt fra opplegget brukt i timene til ekstra-materiale og små løsningsforslag fra oppgaver anbefalt i timene.
 
 `extra`-mappen inneholder mine løsninger på oppgaver som kanskje ikke er veldig eksamensrelevant, men er veldig morsomme å løse. 
 De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre og er navngitt etter dato på gruppetimen.
