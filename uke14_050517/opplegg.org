@@ -1,0 +1,122 @@
+* Opplegg 05.05.17
+** Repitisjon av ~begin~ - Hvor det IKKE trengs!
+I obliger ser vi mye rar bruk av ~begin~. Noen ser ut til å tro at ~begin~ er nødvendig for at destruktive operasjoner skal virke, mens andre bruker det på litt rare steder. Vi trenger blant annet ikke ~begin~ andre steder enn der det forventes kun ett uttrykk, noe som stort sett kun gjelder ~if~-uttrykk. Det er altså ikke nødvendig å bruke ~begin~ i ~cond~, kroppen i anonyme prosedyrer (i motsetning til språk som Python kan Scheme ha flere uttrykk i anonyme prosedyrer). Under er noen kodeeksempler på akkurat dette med ~begin~. Merk at koden blir mye ryddigere uten i disse tilfellene. 
+
+#+BEGIN_SRC scheme 
+  ;; <params> vil under signalisere en parameterliste
+  ;; <expn> vil bety et uttrykk med nummer n
+
+  ;; Dette er ikke nødvendig:
+  (lambda (<params>)
+    (begin <exp1>
+	   <exp2>
+	   ...
+	   <expn>))
+  ;; Vi kan isteden gjøre slik:
+  (lambda (<params>)
+     <exp1>
+     <exp2>
+     ...
+     <expn>)
+
+
+  ;; lst er under en liste. Ellers er betydninger de samme som over.
+  ;; exp er kun for å vise at det er expressions.
+  ;; Dette er heller ikke nødvendig:
+  (cond ((null? lst)
+	 (begin  <exp1>
+		 <exp2>
+		 ...
+		 <expn>))
+	;; videre uttrykk
+	(else
+	 (begin (display "her kan det også være flere uttrykk")
+		(newline))))
+  ;; gjør slik isteden:
+  (cond ((null? lst)
+	 <exp1>
+	 <exp2>
+	 ...
+	 <expn>)
+	;; videre uttrykk
+	(else
+	 (display "her kan det også være flere uttrykk")
+	 (newline)))
+#+END_SRC
+
+
+
+** Metasirkulær evaluator
+Hva betyr det at evaluatoren vår er "metasirkulær"? Det betyr rett og slett av vi skriver en evaluator hvor vi bruker lignende mekanismer i vårt eget språk for å lage en evaluator til et nytt. Hvis vi f.eks skulle skrevet en Scheme interpreter/evaluator i C, Python eller et annet språk som var forskjellig fra Scheme, måtte vi fort gjort parsing og mer jobb. I Scheme leses input fra terminal inn som lister, så vi har allerede en datastruktur det er enkelt å jobbe på i språket vårt. Som vi ser i filen ~evaluator.scm~ (prekoden deres og tema for kapittel 4 i SICP), så ser vi at vi bruker prosedyren(?) ~read~ til å lese input fra REPL. ~read~ leser ett enkelt uttrykk enten det er en liste, ord, tall eller hva enn det måtte være. Legg f.eks merke til output fra:
+#+BEGIN_SRC scheme 
+  (let ((input (read)))
+    input)
+
+  ;; skriver vi inn...
+
+    ;; hei på deg
+    ;; så får vi hei returnert. Neste kall på read gir på, og siste kall gir deg.
+
+    ;; (+ 1 2 3)
+    ;; så får vi listen (+ 1 2 3)
+
+    ;; 1
+    ;; så får vi 1
+#+END_SRC
+
+Man kan nok bruke argumentet om at mye av forskjellen ligger i at parseringen skjer for oss som del av språket, og det er riktig. Da sparer man hvertfall tid på å skrive en parser ;)
+
+*** Live-koding hvor vi ser på evaluator.scm sammen
+Dette må du nesten være i gruppetimen for å se :) Her ser vi på det som nevnes over, hvordan de ulike prosedyrene fungerer, hva de gjør osv. Ikke for mye selvfølgelig, dere må jo ha litt å jobbe med i obligen også :) 
+
+
+*** Hva skal gjøres i obligen?
+**** Skrive prosedyren ~install-primitive!~
+La oss se et kodeeksempel, så vi kan forstå hva den skal gjøre.
+#+BEGIN_SRC scheme
+  ;; vi laster inn evaluator.scm-koden, og starter opp.
+  (set! the-global-environment (setup-environment))
+  (read-eval-print-loop)
+  ;; Men vent! Vi ser at det mangler et primtiv! Og vi ønsker (av en eller annen grunn) å starte opp REPL'et på nytt! Kanskje ønsker vi at dette kun skal være et primitiv denne runden, og ikke igjen! 
+
+  ;; <avslutter REPL'et ved å trykke EOF-knappen i DrRacket, siden dette ikke fungerer bra i Emacs>
+
+  ;; vi legger nå til primitivet square, så det er tilgjenglig for oss neste gang vi er i REPL'et
+  (install-primitive! 'square (lambda (x) (* x x)))
+
+  ;; Kaller REPL'et igjen og bruker square
+  (read-eval-print-loop)
+  ;; it was super effective!
+
+#+END_SRC
+
+Noen hint til denne oppgaven er å definere noen prosedyrer i meta-REPL'et (som jeg kun har kalt REPL'et over), og printe ut ~the-global-environment~ i det vanlige REPL'et vårt. Hva er forskjellen på primitive prosedyrer og prosedyrer vi definerer selv? Se også litt på hvordan variable/prosedyrer defineres. Veldig vage hint, men det er stort sett dette studenter har trengt for å komme igang med denne oppgaven :)
+
+**** Skrive ny syntaks til språket
+Det er flere oppgaver som går på å skrive ny syntaks i språket (alternativ ~if~-syntaks, ~let~, alternativ ~let~-syntaks osv.). Her er mye av trikset å se på det som er definert i prekoden, og elementære listeoperasjoner. 
+
+
+
+** Side-spørsmål: Har vi en ~eval~-prosedyre i Scheme? Siden vi har det i meta-evaluatoren?
+Ja, det har vi. Dersom du skulle ønske å evaluere en liste med kode i Scheme, så kan vi bruke den innebygde ~eval~. I R5RS-spesifikasjonen finner vi informasjon om [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r5rs-html/r5rs_8.html#IDX377][den innebygde prosedyren ~eval~]]. Vi ser at ~eval~ tar to argumenter: et uttrykk (liste eller primitiv) og et miljø/omgivelse. Her kan vi lage våre egne miljøer, men det kommer vi ikke til å bruke tid på. Dersom vi skulle ønske å kjøre koden vår i samme miljø som REPL'et vårt kjører i kan bruke prosedyren ~interaction-environment~ til å skaffe det. Noen kodeeksempler:
+#+BEGIN_SRC scheme 
+  (eval '(define x 10) (interaction-environment))
+  ;; x er nå definert, og kan brukes akkurat som om vi hadde kalt (define x 10) direkte i REPL'et
+
+  (eval 2 (interaction-environment))
+  ;; tallet 2 evalueres til seg selv, og vi får dermed 2 som returverdi
+
+  (eval '(list + 3 4) (interaction-environment))
+  ;; kjører akkurat som vi ville trodd, og returnerer 5.
+  ;; dette viser at prosedyrelisten ikke trenger å være helt uevaluert. Det går helt greit at + er evaluert til prosedyren +, osv. Eneste forskjell i en quotet utgave ('+) blir at vi evaluerer symbolet til prosedyren + (akkurat som om vi hadde evaluert symbolet + direkte i REPL'et (altså uten quote).
+
+
+#+END_SRC
+
+Vi kan tenke oss at det er dette som skjer i bakgrunn når vi gir koden vår til REPL'et. Uttrykket vi skriver inn sendes til ~eval~ som også får inn det aktuelle miljøet/omgivelsen (husk omgivelsesmodellen!). Dette miljøet baserer seg litt på hvilke prosedyrekall som har skjedd (nytt prosedyrekall betyr ny omgivelse), og vil derfor ikke være ~(interaction-environment)~ hver gang. ~interaction-environment~ gir oss det globale miljøet/omgivelsen. Dette vil dere se i prekoden til prosedyren ~mc-apply~ hvor vi bruker ~extend-enviornment~. Noe lignende skjer i bakgrunn på vanlig Scheme.
+
+Hva kan dette brukes til? Tenk det at du gjør noe skikkelig 1337 h4x0r, nemlig å skrive kode som endrer kode og utfører denne koden. Vi kan tenke oss at vi har en liste med programkode, som vi i hvert tidssteg endrer litt på, og utfører etterpå. Noe som betyr at programmet i praksis endrer seg selv når det kjører. Det er sikkert flere bruksområder, men dette må være noe av det kuleste. 
+
+
+** Kahoot om metasirkulær evaluator og diverse repetering 
+   
