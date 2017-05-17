@@ -98,7 +98,7 @@ Det er flere oppgaver som går på å skrive ny syntaks i språket (alternativ ~
 
 
 ** Side-spørsmål: Har vi en ~eval~-prosedyre i Scheme? Siden vi har det i meta-evaluatoren?
-Ja, det har vi. Dersom du skulle ønske å evaluere en liste med kode i Scheme, så kan vi bruke den innebygde ~eval~. I R5RS-spesifikasjonen finner vi informasjon om [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r5rs-html/r5rs_8.html#IDX377][den innebygde prosedyren ~eval~]]. Vi ser at ~eval~ tar to argumenter: et uttrykk (liste eller primitiv) og et miljø/omgivelse. Her kan vi lage våre egne miljøer, men det kommer vi ikke til å bruke tid på. Dersom vi skulle ønske å kjøre koden vår i samme miljø som REPL'et vårt kjører i kan bruke prosedyren ~interaction-environment~ til å skaffe det. Noen kodeeksempler:
+Ja, det har vi. Dersom du skulle ønske å evaluere en liste med kode i Scheme, så kan vi bruke den innebygde ~eval~. I R5RS-spesifikasjonen finner vi informasjon om [[http://groups.csail.mit.edu/mac/ftpdir/scheme-reports/r5rs-html/r5rs_8.html#IDX377][den innebygde prosedyren eval]]. Vi ser at ~eval~ tar to argumenter: et uttrykk (liste eller primitiv) og et miljø/omgivelse. Her kan vi lage våre egne miljøer, men det kommer vi ikke til å bruke tid på. Dersom vi skulle ønske å kjøre koden vår i samme miljø som REPL'et vårt kjører i kan bruke prosedyren ~interaction-environment~ til å skaffe det. Noen kodeeksempler:
 #+BEGIN_SRC scheme 
   (eval '(define x 10) (interaction-environment))
   ;; x er nå definert, og kan brukes akkurat som om vi hadde kalt (define x 10) direkte i REPL'et
