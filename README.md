@@ -8,6 +8,8 @@ Innhold i mappene (/tema for timene):
 * `uke12_210417` - Omgivelsesdiagram, tips til 3a og tilleggsstoff om makroer
 * `uke13_280417` - kun oblig 3a hjelp
 * `uke14_050517` - repitsjon av begin, meta-sirkulær evaluator.
+* I uke 15 (12.05.17) var det kun oblighjelp til 3b (meta-sirkulær evaluator)
+* `uke16_190517` (KOMMER) - Eksamensøving. Gjennomgang av eksamensoppgaver, diverse konsepter og stor kahoot.
 
 `extra`-mappen inneholder mine løsninger på oppgaver som kanskje ikke er veldig eksamensrelevant, men er veldig morsomme å løse. 
 De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre og er navngitt etter dato på gruppetimen.
