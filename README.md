@@ -10,6 +10,7 @@ Innhold i mappene (/tema for timene):
 * `uke14_050517` - repitsjon av begin, meta-sirkulær evaluator.
 * I uke 15 (12.05.17) var det kun oblighjelp til 3b (meta-sirkulær evaluator)
 * `uke16_190517` (KOMMER) - Eksamensøving. Gjennomgang av eksamensoppgaver, diverse konsepter og stor kahoot.
+* Blir det gruppetime uke 17? håper det hvertfall! :D 
 
 `extra`-mappen inneholder mine løsninger på oppgaver som kanskje ikke er veldig eksamensrelevant, men er veldig morsomme å løse. 
 De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre og er navngitt etter dato på gruppetimen.
