@@ -1,0 +1,104 @@
+* Opplegg for gruppetimen 19.05.17
+I dag blir det repetering av sentrale deler av emnet/kurset. Det kan hende mye av det under ikke blir gjennomgått i timen, men da har dere det hvertfall som ekstra resurs til eksamensøvingen. 
+
+Det vil også velges ut noen tilfeldige oppgaver fra tidligere eksamener om ekstra tid. 
+
+** Funksjonell programmering
+Funksjonell programmering har følgende egenskaper:
+- Prosedyrer kalles for sin returverdi
+- Samme returverdi gitt samme argumenter
+- Avhenger ikke av eller endrer tilstand (variable)
+- Vi kan erstatte et uttrykk med sin returverdi uten at programmets utførelse/kjøring endres (med tanke på output)
+
+Kan du tenke deg noen fordeler med funksjonell programmering?
+
+** Små konsepter det er lurt å kunne
+*** Substitusjonsmodellen
+Standard-regel for evaluering av uttrykk. Deluttrykkene evalueres og erstattes av sin returverdi. Eksempel:
+#+BEGIN_SRC scheme
+  (+ (* 3 4) (- (* 4 6) 3))
+  ;; reduseres til
+  (+ 12 (- (* 4 6) 3))
+  ;; reduseres til
+  (+ 12 (- 24 3))
+  ;; reduseres til
+  (+ 12 21)
+  ;; reduseres til
+  33
+#+END_SRC
+
+*** Evalueringsstrategier
+Standard evaluering i Scheme er applicative order/eager evaluation, som vil si at argumentene evalueres før prosedyren. I normal order/lazy evaluation evalueres argumentene til en prosedyre først ved behov. Flere special forms vil være en type lazy evaluation, samme med strømmer. 
+
+*** Førsteklasses objekter
+At prosedyrer er førsteklasses objekter vil si at de kan brukes akkurat som alle andre primitiver i språket. 
+
+*** Høyereordens prosedyrer
+Høyereordens prosedyrer er prosedyrer som tar imot prosedyrer som argumenter og/eller returnerer prosedyrer. Eksempel på høyereordens prosedyrer er ~map~, ~filter~ og ~reduce~. Dere har til og med skrevet noen høyereordens prosedyrer selv (~self~, ~reduce-reverse~ og flere!). 
+*** Prosesstyper
+- Hale-rekursiv prosedyre gir opphav til iterativ prosess 
+- (vanlig) Rekursiv prosedyre gir opphav til rekursiv prosess. 
+
+
+** Boks og peker diagram
+La oss ta en titt på følgende eksempel ("stjelt" fra et [[https://berkeley-cs61as.github.io/textbook/mutable-list-structure.html][emne på Berkeley]]):
+
+#+BEGIN_SRC scheme
+(define x (cons (list 'a 'b) (list 'c 'd)))
+(define y (list 'e 'f))
+(define z (cons y (cdr x)))
+#+END_SRC
+
+Hvordan ser boks og peker diagrammet ut?
+
+[[http://mitpress.mit.edu/sicp/full-text/book/ch3-Z-G-15.gif]] (usikker på om dette vil vises)
+
+Flere oppgaver om boks-og-peker-diagram fra tidligere eksamener gjennomgåes. 
+
+
+** Omgivelsesdiagram 
+Omgivelsesdiagram er viktig å kunne tegne, mye for forståelsen av omgivelsesmodellen som ble introdusert sammen med destruktive operasjoner. Når vi har destruktive operasjoner vil ikke lenger substitusjonsmodellen kunne gi oss et nøyaktiv bilde av kjøringene. 
+
+Under er en oversikt over hva de ulike termene/begrepene rundt omgivelsesdiagram og hva de betyr i et faktisk omgivelsesdiagram. Merk at ~x~ i *E1* også vil være en binding. 
+[[./omgivelser_explained.png]]
+
+Reglene for omgivelsesdiagram simplifisert:
+- Hvert prosedyrekall oppretter en ny ramme
+- define legger til bindinger i nåværende/gjeldende ramme, og set! endrer binginger i nærmeste ramme.
+- Når vi evaluerer et `lambda`-uttrykk (enten anonymt eller med `define`-syntaksen for prosedyrer hvor vi også binder den) så opprettes det en prosedyre. 
+
+Synes du omgivelsesdiagram er vanskelig, så kan jeg anbefale [[https://github.com/vegarsti/INF2810V17/tree/master/08][Vegard sine notater om omgivelsesdiagram]] og eksemplene mine; [[https://github.com/markydawn/INF2810v17/tree/master/uke11_070417#omgivelsesdiagram][enkelt eksempel med `let` uten innkapsling]] og [[https://github.com/markydawn/INF2810v17/tree/master/uke12_210417#et-lite-message-passing-eksempel][eksempel med message passing og innkapsling]].
+
+Vi gjennomgår oppgave 6 fra eksamen 2014 i gruppetimen. Dette blir ikke lagt ut her, siden dere allerede har et løsningsforslag på kurssidene. Andre eksamensoppgaver om omgivelsesdiagram tar vi neste uke om ønskelig. 
+
+*** NB!
+`let`-uttrykk er syntaktisk sukker for kall på anonyme prosedyrer. Vi husker fra den hellige bok (læreboka aka SICP) at et `let`-uttrykk
+#+BEGIN_SRC scheme
+  (let ((var1 val1)
+	(var2 val2)
+	...
+	(varn valn))
+    <body>)
+#+END_SRC 
+Er syntaktisk sukker for:
+#+BEGIN_SRC scheme
+  ((lambda (var1 var2 ... varn)
+     <body>)
+   val1 val2 ... valn)
+#+END_SRC
+
+Dette betyr rett og slett at `let`-uttrykk er prosedyrekall de også, og oppretter nye rammer. 
+
+
+
+** Andre emner som kan være interessante
+*** INF3110 - Programmeringsspråk
+En stor del av kurset er funksjonell programmering i språket Standard ML. Dette språket har inspirert syntaksen til Haskell, Elm, og flere språk. Man får også en introduksjon til logikk-programmering i Prolog mot slutten av kurset.  
+*** INF4820 - Algoritmer for kunstig intelligens og naturlige språk 
+Implementasjon av språkmodeller og algoritmer for språkmodeller i Common Lisp. Kan være kult om dere liker språkmodeller og/eller Common Lisp.
+*** Ikke veldig relevant, men om dere liker høynivåspråk: INF3331 - Problemløsing med høynivåspråk
+For det meste koding i Python, men med innslag av Linux shell (bash). 
+
+
+** Stor kahoot (med premie? hvis Marie greier å somle seg til å skaffe en ;) )
+link will come! Kan fort ta noen dager i tilfelle noen andre vil gjenbruke den. 

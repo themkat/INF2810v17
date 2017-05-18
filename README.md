@@ -10,7 +10,7 @@ Materiale fra INF2810 undervisningen i Gruppe 5. Dette kommer til å være alt f
 * `uke13_280417` - kun oblig 3a hjelp
 * `uke14_050517` - repitsjon av begin, meta-sirkulær evaluator.
 * I uke 15 (12.05.17) var det kun oblighjelp til 3b (meta-sirkulær evaluator)
-* `uke16_190517` (KOMMER) - Eksamensøving. Gjennomgang av eksamensoppgaver, diverse konsepter og stor kahoot.
+* `uke16_190517` - Eksamensøving. Gjennomgang av eksamensoppgaver, omgivelsesdiagram, boks-og-peker, generelle konsepter og mer!
 * Blir det gruppetime uke 17? håper det hvertfall! :D 
 
 `extra`-mappen inneholder mine løsninger på oppgaver som kanskje ikke er veldig eksamensrelevant, men er veldig morsomme å løse. 
