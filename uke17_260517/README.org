@@ -1,0 +1,198 @@
+* Opplegg 26.05.17
+Denne timen blir det litt forskjellig. Eksamensgjennomganger er eksklusivt for de som møter opp. Fra tidligere repeterer vi om ønskelig:
+- [[https://github.com/markydawn/INF2810v17/tree/master/uke16_190517#omgivelsesdiagram][Omgiveslesdiagram]] 
+- [[https://github.com/markydawn/INF2810v17/tree/master/uke16_190517#boks-og-peker-diagram][Boks og peker diagram]] 
+
+
+** Definisjonen av en liste
+Vi har fra [[http://www.schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-9.html#%25_idx_414][R5RS-spesifikasjonen]] definisjonen av en liste: 
+#+BEGIN_QUOTE
+By definition, all lists have finite length and are terminated by the empty list.
+#+END_QUOTE
+
+Dette betyr blant annet at sykler ikke er lister siden de ikke er terminert av den tomme listen, og ikke har fast lengde. 
+
+La oss nå se på litt eksempler rundt dette med lister.
+
+
+*** Liste eller ikke liste? Det er spørsmålet
+Vi husker at en liste er en kjede ~cons~-celler der neste-pekeren (~cdr~) enten er en ny ~cons~-celle eller den tomme listen. Når vi sjekker om noe er en liste eller ikke er det lurt å starte innerst i ~cons~-cellene (eller siste boks i boks-og-peker-diagram). 
+
+**** Liste
+#+BEGIN_SRC scheme
+  (cons 1 (cons 2 (cons 3 '())))
+  ;; printer ut i REPL:
+  (1 2 3)
+
+  ;; Boks-og-peker diagram:
+  ;;
+  ;;   +-------+-------+        +-------+-------+       +-------+-------+  
+  ;;   |       |       |        |       |       |       |       |    /  |
+  ;;   |   o   |   o---+------> |   o   |   o---+------>|   o   |   /   |
+  ;;   |   |   |       |        |   |   |       |       |   |   |  /    |
+  ;;   +---+---+-------+        +---+---+-------+       +---+---+-------+ 
+  ;;       |                        |                       |
+  ;;       |                        |                       |
+  ;;       |                        |                       |
+  ;;       V                        V                       V
+  ;;       1                        2                       3
+#+END_SRC
+
+Hvorfor er en liste? Det er rett og slett fordi den er av fastlengde og terminert av den tomme listen. Hver neste-peker peker enten på en ny ~cons~-celle eller den tomme listen.
+
+**** Ikke liste
+#+BEGIN_SRC scheme
+  (cons 1 (cons 2 3))
+  ;; printer ut i REPL:
+  (1 2 . 3)
+
+  ;; Boks-og-peker-diagram
+  ;;
+  ;;   +-------+-------+        +-------+-------+ 
+  ;;   |       |       |        |       |       |
+  ;;   |   o   |   o---+------> |   o   |   o   |
+  ;;   |   |   |       |        |   |   |   |   |
+  ;;   +---+---+-------+        +---+---+---+---+ 
+  ;;       |                        |       |
+  ;;       |                        |       |
+  ;;       |                        |       |
+  ;;       V                        V       V
+  ;;       1                        2       3
+#+END_SRC
+
+Hvorfor er ikke dette en liste? Det er rett og slett fordi den ikke er terminert av den tomme listen. Hvorfor printes det ut akkurat slik som over i REPL'et? La oss starte innerst. Her har vi kallet ~(cons 2 3)~, noe som evalueres til paret mellom ~2~ og ~3~. Deretter har vi paret mellom ~1~ og ~(cons 2 3)~. Siden neste-pekeren her peker på en ny ~cons~-celle vil det ikke være en prikknotasjon mellom ~1~ og ~2~. 
+
+**** Liste
+#+BEGIN_SRC scheme
+  (cons (list 1 2) (list 1 2))
+  ;; printer ut i REPL:
+  ((1 2) 1 2)
+
+  ;; Boks-og-peker diagram:
+  ;;
+  ;;   +-------+-------+          
+  ;;   |       |       |        
+  ;;   |   o   |   o---+---| 
+  ;;   |   |   |       |   |
+  ;;   +---+---+-------+   |
+  ;;       |               V
+  ;;       |           +-------+-------+        +-------+-------+  
+  ;;       |           |       |       |        |       |    /  |
+  ;;       |           |   o   |   o---+------> |   o   |   /   |
+  ;;       |           |   |   |       |        |   |   |  /    |
+  ;;       |           +---+---+-------+        +---+---+-------+ 
+  ;;       |               |                        | 
+  ;;       |               |                        |
+  ;;       |               |                        | 
+  ;;       |               V                        V 
+  ;;       |               1                        2
+  ;;       |  
+  ;;       V
+  ;;   +-------+-------+        +-------+-------+  
+  ;;   |       |       |        |       |    /  |
+  ;;   |   o   |   o---+------> |   o   |   /   |
+  ;;   |   |   |       |        |   |   |  /    |
+  ;;   +---+---+-------+        +---+---+-------+ 
+  ;;       |                        | 
+  ;;       |                        |
+  ;;       |                        | 
+  ;;       V                        V 
+  ;;       1                        2
+#+END_SRC
+
+Hvorfor printes ikke denne ut som ~((1 2) (1 2))~? Dette kommer rett og slett av at neste-pekeren peker på en ny liste (terminert av den tomme listen). Dette er en liste hvor første element i listen er en ny liste. 
+
+
+
+** Prosesstyper - rekursiv vs iterativ
+Noen synes det kan være litt vanskelig å se når en prosedyre gir opphav til en rekursiv prosess, og når den gir opphav til en iterativ prosess. La oss ta for oss noen eksempler. La oss starte med prosedyren:
+#+BEGIN_SRC scheme
+  (define (length items)
+    (if (null? items)
+	0
+	(+ 1 (length (cdr items)))))
+#+END_SRC
+
+Som vi kanskje ser, så regner denne prosedyren ut lengden av en liste. Hva slags prosesstype vil et kall på denne prosedyren gi opphav til? Noen ser kanskje med en gang at kall på denne prosedyren vil gi opphav til en *rekursiv prosess*, men la oss se hvorfor. Dette kan vi se se ved å bruke substitusjonsmodellen. Vi erstatter rett og slett hvert kall med returverdien (eller neste kall i rekken), altså hva kallet reduseres til. La oss se for oss et kall:
+#+BEGIN_SRC scheme
+  (length (list 1 2 3 4))
+  ;; reduseres til
+  (+ 1 (length (list 2 3 4)))
+  ;; reduseres til
+  (+ 1 (+ 1 (length (list 3 4))))
+  ;; reduseres til
+  (+ 1 (+ 1 (+ 1 (length (list 4)))))
+  ;; reduseres til
+  (+ 1 (+ 1 (+ 1 (+ 1 (length '())))))
+  ;; reduseres til
+  (+ 1 (+ 1 (+ 1 (+ 1 0))))
+  ;; reduseres til
+  (+ 1 (+ 1 (+ 1 1)))
+  ;; reduseres til
+  (+ 1 (+ 1 2))
+  ;; redueres til
+  (+ 1 3)
+  ;; reduserer til returverdien
+  4
+#+END_SRC
+
+Legg merke til denne serien ventende kall på ~+~ som må utføres når siste ~length~-kall er utført. Det er dette som identifiserer rekursive prosesser. 
+
+La oss nå ta for oss en alternativ implementasjon av ~length~:
+#+BEGIN_SRC scheme
+  (define (length lst)
+    (define (iter lst n)
+      (if (null? lst)
+	  n
+	  (iter (cdr lst) (+ n 1))))
+    (iter lst 0))
+#+END_SRC
+
+Her ser vi at vi har en hjelpeprosedyre, men dette er ikke det viktige her (se også NB!-feltet under). Som noen kanskje ser, så vil et kall på denne prosedyren gi opphav til en *iterativ prosess*. La oss nå se hvorfor med substitusjonsmodellen:
+#+BEGIN_SRC scheme
+  (length (list 1 2 3 4))
+  ;; reduseres til
+  (iter (list 1 2 3 4) 0)
+  ;; reduseres til
+  (iter (list 2 3 4) 1)
+  ;; reduseres til
+  (iter (list 3 4) 2)
+  ;; reduseres til
+  (iter (list 4) 3)
+  ;; reduseres til
+  (iter '() 4)
+  ;; reduseres til returverdien
+  4
+#+END_SRC
+
+Her ser vi at vi ikke får denne serien med ventende kall på ~+~. Det er viktig å huske på standard evalueringsregel i Scheme her: nemlig at argumenter til prosedyrer evalueres først, og deretter utføres prosedyrekallet. Det er rett og slett mangelen på slike ventende kall som identifiserer iterative prosesser. 
+
+
+*** NB!
+Hjelpeprosedyrer gir ikke automatisk opphav til iterative prosesser. Det er mangelen på ventende kall som gjør at prosedyren gir opphav til iterativ prosess. 
+
+
+*** Hvorfor gir eksempelet over opphav til iterativ prosess?!?
+Noen synes kanskje det er litt rart at de to rekursive kallene gir opphav til forskjellige prosesser. Grunnen er rett og slett at Scheme-tolkeren optimaliserer kall som er i hale-posisjon (som i siste eksempel) slik at vi gjenbruker stack-framen (der variable/parameter-verdier er "lagret") istedenfor å lage en ny (som er standard ved rekursive kall). 
+
+
+
+** Strømmer 
+Strømmer er nesten som lister, men evaluering av neste-pekeren er utsatt til vi ber om denne verdien. For å oppnå dette lager vi en egen celle-struktur for strømmer:
+#+BEGIN_SRC scheme
+  (define-syntax cons-stream
+    (syntax-rules ()
+      ((cons-stream head tail) (cons head (delay tail)))))
+#+END_SRC
+
+Hva skjer her? Når vi lager makroer, så evalueres uttrykkene når vi ønsker. Det vi gjør er rett og slett å generere kode. ~delay~ sørger for å utsette og memoisere koden som legges inn i ~tail~, noe som betyr at det kun er ~head~ som evalueres i kallet ~(cons-stream (+ 1 2) (+ 3 4))~ (noe som betyr at ~(+ 3 4)~ ikke blir evaluert før vi utfører ~stream-cdr~. [[https://github.com/vegarsti/INF2810V17/tree/master/11][Fin gjennomgang om resten av detaljene]] (merk at ~delay~ i R5RS er en makro/special form som også gjør memoisering). 
+
+
+Hvorfor trenger vi dette? Strømmer gir oss en måte å håndtere uendelige mengder data (f.eks alle de naturlige tallene, fibonacci-tallrekken osv.).
+
+
+Om tid ser vi raskt på oppgave 3c fra Oblig 3a og tidligere eksamensoppgaver om strømmer. 
+
+
+** Takk for i år! Lykke til på eksamen!
+Om det er noe dere lurer på i siste liten, så bruk Piazza effektivt! Da kan flere dra nytte av spørsmålet ditt. Om ikke er det selvfølgelig bare å ta kontakt via hjelpemailen på kurssidene (evt. gruppelærere direkte). 
