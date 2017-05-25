@@ -38,6 +38,7 @@ Se også Piazza for flere linker.
 ## Nyttige linker
 * [Ukeoppgaver med løsningsforslag (fra SICP og mer)](http://folk.uio.no/esbenss/inf2810/gruppelaererenes-side.html)
 * [Vegards github repo](https://github.com/vegarsti/INF2810V17)
+
 ⋅⋅⋅[Høyereordens prosedyrer med implementasjoner og (noen) eksempler](https://github.com/vegarsti/INF2810V17/tree/master/04)
 ⋅⋅⋅[let og lambda](https://github.com/vegarsti/INF2810V17/tree/master/05)
 ⋅⋅⋅[Guide til omgivelsesdiagram (med eksempler og regler)](https://github.com/vegarsti/INF2810V17/tree/master/08)
