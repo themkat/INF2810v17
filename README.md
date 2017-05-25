@@ -42,7 +42,7 @@ Se også Piazza for flere linker.
   - [let og lambda](https://github.com/vegarsti/INF2810V17/tree/master/05)
   - [Guide til omgivelsesdiagram (med eksempler og regler)](https://github.com/vegarsti/INF2810V17/tree/master/08)
   - [Boks-og-peker-diagram med set-car! og set-cdr!](https://github.com/vegarsti/INF2810V17/tree/master/09)
-  -[Memoisering (inkluderer eksempler med innkapsling)](https://github.com/vegarsti/INF2810V17/tree/master/10)
+  - [Memoisering (inkluderer eksempler med innkapsling)](https://github.com/vegarsti/INF2810V17/tree/master/10)
 
 
 ## Annet
