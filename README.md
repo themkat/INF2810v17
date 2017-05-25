@@ -2,6 +2,9 @@
 Materiale fra INF2810 undervisningen i Gruppe 5. Dette kommer til å være alt fra opplegget brukt i timene til ekstra-materiale og små løsningsforslag fra oppgaver anbefalt i timene. Håper dette kan være nyttig mens dere har kurset, under øving til eksamen eller etter kurset (som ekstra-oppgaver og ting merket IKKE PENSUM). 
 
 
+## Takk for i år, og lykke til på eksamen!
+
+
 ## Innhold i mappene (/tema for timene): 
 * `uke9_230317` - Omgivelsesdiagram for anonyme prosedyrer
 * `uke10_310317` - Assosiasjonstabeller og litt nyttige liste-prosedyrer
@@ -29,9 +32,8 @@ De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre
 
 
 ## Kahoot-linker
-* TODO
-(noen kahooter er ikke lagt ut pga at kvaliteten ble vurdert av meg til å ikke være på nivå med de andre)
-Om du finner noen skrivefeil eller andre feil i kahootene, så si ifra!
+* [Stor repitisjonskahoot](https://play.kahoot.it/#/k/6fc7868e-ebd2-4326-ae25-61ec46c84044) (diverse temaer og begreper fra hele kurset)
+Se også Piazza for flere linker. 
 
 
 ## Annet

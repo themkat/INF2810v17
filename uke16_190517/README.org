@@ -100,5 +100,5 @@ Implementasjon av språkmodeller og algoritmer for språkmodeller i Common Lisp.
 For det meste koding i Python, men med innslag av Linux shell (bash). 
 
 
-** Stor kahoot (med premie? hvis Marie greier å somle seg til å skaffe en ;) )
-link will come! Kan fort ta noen dager i tilfelle noen andre vil gjenbruke den. 
+** Stor kahoot
+https://play.kahoot.it/#/k/6fc7868e-ebd2-4326-ae25-61ec46c84044
