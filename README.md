@@ -1,8 +1,7 @@
 # INF2810v17
 Materiale fra INF2810 undervisningen i Gruppe 5. Dette kommer til å være alt fra opplegget brukt i timene til ekstra-materiale og små løsningsforslag fra oppgaver anbefalt i timene. Håper dette kan være nyttig mens dere har kurset, under øving til eksamen eller etter kurset (som ekstra-oppgaver og ting merket IKKE PENSUM). 
 
-
-## Takk for i år, og lykke til på eksamen!
+**Takk for i år, og lykke til på eksamen!**
 
 
 ## Innhold i mappene (/tema for timene): 
@@ -14,7 +13,7 @@ Materiale fra INF2810 undervisningen i Gruppe 5. Dette kommer til å være alt f
 * `uke14_050517` - repitsjon av begin, meta-sirkulær evaluator.
 * I uke 15 (12.05.17) var det kun oblighjelp til 3b (meta-sirkulær evaluator)
 * `uke16_190517` - Eksamensøving. Gjennomgang av eksamensoppgaver, omgivelsesdiagram, boks-og-peker, generelle konsepter og mer!
-* Blir det gruppetime uke 17? håper det hvertfall! :D 
+* `uke17_260517` - Eksamensøving. Gjennomgang av eksamensoppgaver og litt repetisjon av diverse konsepter.
 
 `extra`-mappen inneholder mine løsninger på oppgaver som kanskje ikke er veldig eksamensrelevant, men er veldig morsomme å løse. 
 De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre og er navngitt etter dato på gruppetimen.
@@ -36,8 +35,17 @@ De andre mappene inneholder tilleggsstoff til det som allerede er laget av andre
 Se også Piazza for flere linker. 
 
 
-## Annet
+## Nyttige linker
+* [Ukeoppgaver med løsningsforslag (fra SICP og mer)](http://folk.uio.no/esbenss/inf2810/gruppelaererenes-side.html)
+* [Vegards github repo](https://github.com/vegarsti/INF2810V17)
+... [Høyereordens prosedyrer med implementasjoner og (noen) eksempler](https://github.com/vegarsti/INF2810V17/tree/master/04)
+... [let og lambda](https://github.com/vegarsti/INF2810V17/tree/master/05)
+... [Guide til omgivelsesdiagram (med eksempler og regler)](https://github.com/vegarsti/INF2810V17/tree/master/08)
+... [Boks-og-peker-diagram med set-car! og set-cdr!](https://github.com/vegarsti/INF2810V17/tree/master/09)
+... [Memoisering (inkluderer eksempler med innkapsling)](https://github.com/vegarsti/INF2810V17/tree/master/10)
 
+
+## Annet
 Om det er noe du ønsker å se her (av opplegg eller annet), så ta kontakt gjerne kontakt via [kontaktinformasjon på emnesidene](http://www.uio.no/studier/emner/matnat/ifi/INF2810/v17/kontakt.html). Du finner meg under Gruppe 5 (fredag 12:15--14:00): ‘Chief Emacs Evangelist’ Marie Katrine Ekeberg. 
 
 [Guide for Emacs-oppsett](http://folk.uio.no/mariuek/inf2810/emacs-setup.html). Om du er ny i Emacs kan du lese [nybegynnerguiden](http://folk.uio.no/mariuek/inf2810/emacs101.html) (merk at denne er i litt uferdig tilstand, og bør leses mest pga hotkey-oversikter). Dersom du av en eller annen grunn ønsker inspirasjon til et Emacs oppsett kan du se [mitt oppsett](https://github.com/markydawn/.emacs.d).
